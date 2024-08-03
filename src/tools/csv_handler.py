@@ -4,7 +4,7 @@ from browser.scrappers.product import Product
 class CsvHandler:
     def __init__(self, filename: str):
         self.filename = filename
-        self.headers = ["ProductName", "Price", "ProductUrl", "Rating", "RatingNumber"]
+        self.headers = ["name", "price", "url", "rating", "rating_number"]
         self._initialize_csv()
 
     def _initialize_csv(self):
