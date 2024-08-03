@@ -1,38 +1,26 @@
 {
   "link": {
-    "path": "https://www.amazon.com/s?k=",
+    "path": "https://www.amazon.com.br/s?k=",
     "connector": "+"
   },
   "script": {
     "before": {
-      "actions": [{ "type": "click", "selector": "#accept-cookies" }]
+      "goto": "https://www.amazon.com.br/"
     },
-    "after": {
-      "actions": [{ "type": "click", "selector": "#logout" }]
-    }
+    "after": null
   },
-  "extraction": {
-    "search": {
-      "tag": "div",
-      "class": "s-main-slot s-result-list s-search-results sg-row",
-      "custom": null
-    },
-    "product": {
-      "name": "result.find('span', class_='a-text-normal').text.strip()",
-      "price": "result.find('span', class_='a-price-whole').text.strip() if result.find('span', class_='a-price-whole') else 'N/A'",
-      "url": "result.find('a', class_='a-link-normal')['href']",
-      "rating": "result.find('span', class_='a-icon-alt').text.strip() if result.find('span', class_='a-icon-alt') else 'N/A'",
-      "rating_number": "result.find('span', class_='a-size-base').text.strip() if result.find('span', class_='a-size-base') else 'N/A'"
-    },
-    "product_list": {
-      "selector": ".product-list-item",
-      "properties": {
-        "product_name": ".product-title",
-        "price": ".product-price",
-        "product_url": { "attribute": "href", "selector": ".product-link" },
-        "rating": ".product-rating",
-        "rating_number": ".product-rating-number"
-      }
-    }
+  "search": {
+    "tag": "div",
+    "class": "s-main-slot s-result-list s-search-results sg-row",
+    "main_container": "s-main-slot s-result-list s-search-results sg-row",
+    "custom": null,
+    "attribute": { "data-asin": true }
+  },
+  "product": {
+    "name": "result.find('span', class_='a-text-normal').text.strip()",
+    "price": "result.find('span', class_='a-price-whole').text.strip() if result.find('span', class_='a-price-whole') else 'N/A'",
+    "url": "result.find('a', class_='a-link-normal')['href']",
+    "rating": "result.find('span', class_='a-icon-alt').text.strip() if result.find('span', class_='a-icon-alt') else 'N/A'",
+    "rating_number": "result.find('span', class_='a-size-base').text.strip() if result.find('span', class_='a-size-base') else 'N/A'"
   }
 }

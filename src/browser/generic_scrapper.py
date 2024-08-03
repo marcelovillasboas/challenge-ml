@@ -17,9 +17,9 @@ class GenericBrowserScrapper(AbstractScrapper):
     def scrape(self, query):
         self.query = query
         self.execute_before()
-        product = self.execute_main()
+        self.execute_main()
         self.execute_after()
-        self.storage.add_product(self, product)
+        self.storage.add_product(self.content)
         print("Processing")
         
     def execute_main(self):
@@ -30,6 +30,7 @@ class GenericBrowserScrapper(AbstractScrapper):
         self.browser.get(url)
         time.sleep(5)
         self.content = self.extraction()
+        self.content = self.transform_to_df(self.content)
         self.browser.quit()
         return self
         
@@ -60,7 +61,13 @@ class GenericBrowserScrapper(AbstractScrapper):
         if self.steps["search"]["custom"]:
             results = soup.find_all(self.steps["search"]["tag"], self.steps["search"]["custom"])
         else:
-            results = soup.find_all(self.steps["search"]["tag"], class_=self.steps["search"]["class"])
+            main_container = soup.find(self.steps["search"]["tag"], class_=self.steps["search"]["main_container"])
+
+            if not main_container:
+                print("Main container not found.")
+                return self.scrape(self.query)
+
+            results = main_container.find_all(self.steps["search"]["tag"], attrs=self.steps["search"]["attribute"])
 
         data = []
         for result in results:
