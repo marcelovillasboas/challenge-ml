@@ -1,3 +1,4 @@
-from browser.generic_scrapper import GenericBrowserScrapper
+from browser.generic_scrapper import GenericSearchScrapper
 
-amazon = GenericBrowserScrapper("amazon").scrape("Macbook")
+amazon = GenericSearchScrapper("amazon").scrape("Macbook")
+# superfinanceira = GenericSearchScrapper("superfinanceira").scrape()

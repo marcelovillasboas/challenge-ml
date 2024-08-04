@@ -1,7 +1,9 @@
 {
   "link": {
     "path": "https://www.amazon.com.br/s?k=",
-    "connector": "+"
+    "connector": "+",
+    "query_connector": "&",
+    "page_prefix": "page="
   },
   "script": {
     "before": {
@@ -22,5 +24,9 @@
     "url": "result.find('a', class_='a-link-normal')['href']",
     "rating": "result.find('span', class_='a-icon-alt').text.strip() if result.find('span', class_='a-icon-alt') else 'N/A'",
     "rating_number": "result.find('span', class_='a-size-base').text.strip() if result.find('span', class_='a-size-base') else 'N/A'"
+  },
+  "navigation": {
+    "pages": "3",
+    "load_timeout": "3"
   }
 }
