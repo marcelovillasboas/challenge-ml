@@ -5,7 +5,6 @@ from datetime import datetime
 from browser.scrappers.default_scrapper import AbstractScrapper
 from browser.provider.actions.dict import action_dict
 from bs4 import BeautifulSoup
-import numpy as np
 
 class PageLoadException(Exception):
     pass
@@ -25,7 +24,7 @@ class GenericSearchScrapper(AbstractScrapper):
         self.execute_before()
         self.execute_main()
         self.execute_after()
-        self.save_data(self.content)
+        self.save_search_data(self.content)
         print("Data saved to file.")
         
     def execute_main(self):

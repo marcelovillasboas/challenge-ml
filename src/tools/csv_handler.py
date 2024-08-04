@@ -23,4 +23,9 @@ class CsvHandler:
 
         combined_df.to_csv(self.filename, index=False)
 
+    def save_pdf_info(self, pdf_info): # TODO fix
+        try:
+            pdf_info.to_csv()
+        except:
+            raise Exception('Failed to save pdf info into .csv file.')
         

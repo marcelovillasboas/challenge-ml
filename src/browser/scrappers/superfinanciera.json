@@ -1,0 +1,25 @@
+{
+  "link": {
+    "path": "",
+    "connector": "",
+    "query_connector": "",
+    "page_prefix": ""
+  },
+  "script": {
+    "before": {
+      "goto": "https://www.superfinanciera.gov.co/publicaciones/10114895/circulares-externas-2024/"
+    }
+  },
+  "table": {
+    "tag": "table",
+    "class": "tabla_nuevoGris",
+    "table_body": "tbody",
+    "table_row": "tr",
+    "table_column": "td",
+    "first_element": "//table[@class='tabla_nuevoGris']/tbody[2]/tr[1]/td[1]//a"
+  },
+  "navigation": {
+    "pages": "1",
+    "load_timeout": "5"
+  }
+}
