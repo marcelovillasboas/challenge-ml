@@ -24,7 +24,7 @@ class GenericBrowserSearchScraper(AbstractScraper):
         self.execute_before(self.configs)
         self.execute_main()
         self.execute_after(self.configs)
-        self.analyze_df(self.content)
+        # self.analyze_df(self.content)
         self.save_data(self.content, self.configs["storage"]["filename"], self.configs["storage"]["headers"])
         print("Data saved to file.")
         
