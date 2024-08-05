@@ -1,0 +1,53 @@
+{
+  "link": {
+    "path": "https://www.amazon.com.br/s?k=",
+    "connector": "+",
+    "query_connector": "&",
+    "page_prefix": "page="
+  },
+  "script": {
+    "before": {
+      "goto": "https://www.amazon.com.br/"
+    },
+    "after": null
+  },
+  "search": {
+    "tag": "div",
+    "class": "s-main-slot s-result-list s-search-results sg-row",
+    "main_container": "s-main-slot s-result-list s-search-results sg-row",
+    "custom": null,
+    "attribute": { "data-asin": true }
+  },
+  "product": {
+    "name": "result.find('span', class_='a-text-normal').text.strip()",
+    "price": "result.find('span', class_='a-price-whole').text.strip() if result.find('span', class_='a-price-whole') else 'N/A'",
+    "url": "result.find('a', class_='a-link-normal')['href']",
+    "rating": "result.find('span', class_='a-icon-alt').text.strip() if result.find('span', class_='a-icon-alt') else 'N/A'",
+    "rating_number": "result.find('span', class_='a-size-base').text.strip() if result.find('span', class_='a-size-base') else 'N/A'"
+  },
+  "product_alt": {
+    "name": "result.find('span', class_='a-size-base').text.strip() if result.find('span', class_='a-size-base') else 'N/A'",
+    "price": "result.find('span', class_='a-price-whole').text.strip() if result.find('span', class_='a-price-whole') else 'N/A'",
+    "url": "result.find('a', class_='a-link-normal')['href']",
+    "rating": "result.find('span', class_='a-icon-alt').text.strip() if result.find('span', class_='a-icon-alt') else 'N/A'",
+    "rating_number": "result.find('span', class_='a-color-link _bGlmZ_hoverHighlight_3uj-f').text.strip() if result.find('span', class_='a-color-link _bGlmZ_hoverHighlight_3uj-f') else 'N/A'"
+  },
+  "navigation": {
+    "pages": "3",
+    "load_timeout": "3"
+  },
+  "storage": {
+    "filename": "products",
+    "headers": [
+      "name",
+      "price",
+      "url",
+      "rating",
+      "rating_number",
+      "page",
+      "keyword",
+      "source",
+      "execution_date"
+    ]
+  }
+}

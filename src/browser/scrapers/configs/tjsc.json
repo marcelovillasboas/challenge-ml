@@ -1,0 +1,15 @@
+{
+  "script": {
+    "before": {
+      "goto": "https://eprocwebcon.tjsc.jus.br/consulta2g/externo_controlador.php?acao=processo_consulta_publica"
+    },
+    "main": {
+      "tag": "img",
+      "url": "src",
+      "img": "data:image/png;base64"
+    }
+  },
+  "storage": {
+    "filename": "captcha_image.png"
+  }
+}

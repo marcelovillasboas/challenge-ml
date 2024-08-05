@@ -21,5 +21,12 @@
   "navigation": {
     "pages": "1",
     "load_timeout": "5"
+  },
+  "consolidation": {
+    "columns": ["Number", "Fecha", "Descripcion", "Boletin", "PDF_Content"]
+  },
+  "storage": {
+    "filename": "superfinanciera",
+    "headers": ["Number", "Fecha", "Descripcion", "Boletin", "PDF_Text"]
   }
 }

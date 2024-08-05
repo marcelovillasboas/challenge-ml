@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "web-scrapper-ml"
+name = "web-scraper-ml"
 version = "0.1.0"
 description = ""
 authors = ["marcelovb <marcelovillasboas@outlook.com>"]
@@ -12,6 +12,9 @@ beautifulsoup4 = "4.12.3"
 pandas = "2.2.2"
 pdfplumber = "^0.11.2"
 pytesseract = "^0.3.10"
+requests = "^2.32.3"
+2captcha-python = "^1.2.8"
+openai = "^1.39.0"
 
 
 [build-system]

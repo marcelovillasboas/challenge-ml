@@ -47,9 +47,9 @@ class GenericBrowserProvider:
         element = self.browser.find_element(By.XPATH, selector)
         element.click()
 
-    def wait_for_download(self, timeout=30):
+    def wait_for_download(self, filetype, timeout=30):
         seconds = 0
-        while not any([filename.endswith('.pdf') for filename in os.listdir("/home/marcelovb/workspace/challenge-ml/")]):
+        while not any([filename.endswith(f'.{filetype}') for filename in os.listdir("/home/marcelovb/workspace/challenge-ml/")]):
             time.sleep(1)
             seconds += 1
             if seconds > timeout:

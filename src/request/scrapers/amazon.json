@@ -28,5 +28,19 @@
   "navigation": {
     "pages": "3",
     "load_timeout": "3"
+  },
+  "storage": {
+    "filename": "products-browser",
+    "headers": [
+      "name",
+      "price",
+      "url",
+      "rating",
+      "rating_number",
+      "page",
+      "keyword",
+      "source",
+      "execution_date"
+    ]
   }
 }
