@@ -44,11 +44,7 @@ class GenericRequestSearchScraper(AbstractScraper):
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         ]
-        # headers = {
-        #     "User-Agent": random.choice(user_agents),
-        #     "Accept-Language": "en-US,en;q=0.5",
-        #     "Connection": "keep-alive"
-        # }
+
         pages_to_scrape = int(self.configs["navigation"]["pages"])
 
         while self.page_counter <= pages_to_scrape:
