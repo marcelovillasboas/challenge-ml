@@ -6,11 +6,14 @@
     "main": {
       "tag": "audio",
       "url": "src",
-      "img": "data:image/png;base64"
+      "img": "data:image/png;base64",
+      "base_url": "https://sei.trf4.jus.br/",
+      "selector": "//*[@id=\"infraImgAudioCaptcha\"]",
+      "audio_id": "infraSrcAudioCaptcha"
     }
   },
   "storage": {
-    "filename": "captcha_image.png"
+    "filename": "captcha_audio.wav"
   },
   "type": "audio",
   "api_key": "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"

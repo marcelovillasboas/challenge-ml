@@ -123,6 +123,9 @@ class GenericBrowserSearchScraper(AbstractScraper):
         return df
 
     def analyze_df(self, df: pd.DataFrame):
+        df.replace('N/A', pd.NA, inplace=True)
+        df['price'] = pd.to_numeric(df['price'], errors='coerce')
+        df.dropna(subset=['price'], inplace=True)
         total_products = df['name'].nunique()
         top_expensive = df.sort_values(by='price', ascending=False).head(10)
         products_per_page = df['page'].value_counts()

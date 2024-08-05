@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import os
 from browser.provider.generic_browser_provider import GenericBrowserProvider
 from tools.csv_handler import CsvHandler
 from browser.provider.actions.dict import action_dict
@@ -8,6 +9,7 @@ class AbstractScraper(ABC):
     def __init__(self):
         self.browser_provider = GenericBrowserProvider()
         self.browser = self.browser_provider.get_browser()
+        self.base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
 
     @abstractmethod
     def scrape(self):
@@ -16,7 +18,6 @@ class AbstractScraper(ABC):
     @abstractmethod
     def execute_main(self):
         pass
-
     
     def execute_before(self, configs):
         before = configs["script"]["before"]
@@ -37,7 +38,7 @@ class AbstractScraper(ABC):
             return
 
     def get_configs(self, type): # TODO fix path
-        with open(f'/home/marcelovb/workspace/challenge-ml/src/browser/scrapers/configs/{type}.json', 'r') as file:
+        with open(f'{self.base_dir}/src/browser/scrapers/configs/{type}.json', 'r') as file:
             return file.read()
 
     def save_data(self, data, filename, headers):

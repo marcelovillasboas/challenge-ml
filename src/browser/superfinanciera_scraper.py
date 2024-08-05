@@ -22,15 +22,6 @@ class SuperFinancieraScraper(AbstractScraper):
         self.execute_after()
         self.save_data(self.content, self.configs["storage"]["filename"], self.configs["storage"]["headers"])
         print("Data saved to file.")
-
-    # def execute_before(self):
-    #     before = self.configs["script"]["before"]
-    #     if before:
-    #         for action in before:
-    #             if action_dict[action] is None:
-    #                 raise Exception("Script was not defined.")
-    #             action_dict[action](self.browser, before[action])
-    #         return
         
     def execute_main(self):
         self.html = self.browser.page_source
@@ -50,7 +41,7 @@ class SuperFinancieraScraper(AbstractScraper):
         return self
         
     def execute_after(self):
-        download_dir = "/home/marcelovb/workspace/challenge-ml/" # TODO fix path
+        download_dir = self.base_dir
         for filename in os.listdir(download_dir): 
             if filename.endswith('.pdf'):
                 file_path = os.path.join(download_dir, filename)

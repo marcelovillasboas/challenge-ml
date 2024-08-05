@@ -11,5 +11,6 @@
   },
   "storage": {
     "filename": "captcha_image.png"
-  }
+  },
+  "type": "image"
 }

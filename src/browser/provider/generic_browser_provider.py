@@ -7,6 +7,7 @@ from selenium.webdriver.common.keys import Keys
 class GenericBrowserProvider:
     browser: None
     options = webdriver.ChromeOptions()
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
 
     default_options = [
         "--remote-debugging-port=9222",
@@ -23,7 +24,7 @@ class GenericBrowserProvider:
 
     def __init__(self):
         prefs = {
-            "download.default_directory": "/home/marcelovb/workspace/challenge-ml/", # TODO fix path
+            "download.default_directory": self.base_dir,
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True
@@ -49,7 +50,7 @@ class GenericBrowserProvider:
 
     def wait_for_download(self, filetype, timeout=30):
         seconds = 0
-        while not any([filename.endswith(f'.{filetype}') for filename in os.listdir("/home/marcelovb/workspace/challenge-ml/")]):
+        while not any([filename.endswith(f'.{filetype}') for filename in os.listdir(self.base_dir)]):
             time.sleep(1)
             seconds += 1
             if seconds > timeout:
