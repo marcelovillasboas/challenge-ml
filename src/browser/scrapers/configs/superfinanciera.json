@@ -19,8 +19,7 @@
     "first_element": "//table[@class='tabla_nuevoGris']/tbody[2]/tr[1]/td[1]//a"
   },
   "navigation": {
-    "pages": "1",
-    "load_timeout": "5"
+    "load_timeout": "3"
   },
   "consolidation": {
     "columns": ["Number", "Fecha", "Descripcion", "Boletin", "PDF_Content"]

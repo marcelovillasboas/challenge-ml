@@ -12,6 +12,9 @@
       "audio_id": "infraSrcAudioCaptcha"
     }
   },
+  "navigation": {
+    "load_timeout": "3"
+  },
   "storage": {
     "filename": "captcha_audio.wav"
   },

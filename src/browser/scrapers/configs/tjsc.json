@@ -9,6 +9,9 @@
       "img": "data:image/png;base64"
     }
   },
+  "navigation": {
+    "load_timeout": "3"
+  },
   "storage": {
     "filename": "captcha_image.png"
   },

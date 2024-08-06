@@ -23,7 +23,7 @@
     "price": "result.find('span', class_='a-price-whole').text.strip() if result.find('span', class_='a-price-whole') else 'N/A'",
     "url": "result.find('a', class_='a-link-normal')['href']",
     "rating": "result.find('span', class_='a-icon-alt').text.strip() if result.find('span', class_='a-icon-alt') else 'N/A'",
-    "rating_number": "result.find('span', class_='a-size-base').text.strip() if result.find('span', class_='a-size-base') else 'N/A'"
+    "rating_number": "result.find('span', class_='a-size-base').text.strip() if result.find('span', class_='a-size-base').text.isdigit() else result.find('span', class_='a-size-base s-underline-text').text.strip()"
   },
   "product_alt": {
     "name": "result.find('span', class_='a-size-base').text.strip() if result.find('span', class_='a-size-base') else 'N/A'",

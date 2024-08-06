@@ -1,32 +1,40 @@
+import os
 import time
 import json
+import logging
 import pandas as pd
 from datetime import datetime
 from browser.scrapers.default_scraper import AbstractScraper
 from browser.provider.actions.dict import action_dict
 from bs4 import BeautifulSoup
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class PageLoadException(Exception):
     pass
 
 class GenericBrowserSearchScraper(AbstractScraper):
-    def __init__(self, type):
+    def __init__(self, type: str):
         super().__init__()
         self.type = type
         self.page_counter = 1
         self.content = []
         self.configs = json.loads(self.get_configs(self.type))
         if self.configs is None:
-            raise Exception("Scrapper was not configured.")
+            logging.error("Scraper configuration is missing.")
+            raise Exception("Scraper was not configured.")
         
-    def scrape(self, query):
+    def scrape(self, query: str):
         self.query = query
-        self.execute_before(self.configs)
-        self.execute_main()
-        self.execute_after(self.configs)
-        # self.analyze_df(self.content)
-        self.save_data(self.content, self.configs["storage"]["filename"], self.configs["storage"]["headers"])
-        print("Data saved to file.")
+        try:
+            self.execute_before(self.configs)
+            self.execute_main()
+            self.execute_after(self.configs)
+            self.analyze_df(self.content)
+            self.save_data(self.content, self.configs["storage"]["filename"], self.configs["storage"]["headers"])
+        except Exception as e:
+            logging.error(f"An error occurred during scraping: {e}")
         
     def execute_main(self):
         pages_to_scrape = int(self.configs["navigation"]["pages"])
@@ -37,16 +45,17 @@ class GenericBrowserSearchScraper(AbstractScraper):
                 self.browser.get(url)
                 time.sleep(load_timeout)
                 extraction = self.extract()
-                for result in extraction:
-                    self.content.append(result)
-                self.page_counter = self.page_counter + 1
-            except PageLoadException:
-                print(f'Failed to load page. Retrying... Page number => {self.page_counter} | Keyword => {self.query}')
+                self.content.extend(extraction)
+                self.page_counter += 1
+            except (PageLoadException, TimeoutException, NoSuchElementException) as e:
+                logging.warning(f'Failed to load page {self.page_counter} for keyword "{self.query}": {e}. Retrying...')
                 continue
+            except Exception as e:
+                logging.error(f"Unexpected error on page {self.page_counter}: {e}")
+                break
         
         self.content = self.transform_to_df(self.content)
         self.browser.quit()
-        return self
         
     def extract(self):
         self.html = self.browser.page_source
@@ -58,12 +67,11 @@ class GenericBrowserSearchScraper(AbstractScraper):
             product = {}
             primary_success = True
 
-            for step in self.configs['product']:
-                value = self.configs['product'][step]
+            for step, value in self.configs['product'].items():
                 try:
                     content = eval(value)
                     product[step] = content
-                except:
+                except Exception as e:
                     if step == 'name':
                         primary_success = False
                         break
@@ -71,12 +79,11 @@ class GenericBrowserSearchScraper(AbstractScraper):
 
             if not primary_success:
                 product_alt = {}
-                for alt_step in self.configs['product_alt']:
-                    alt_value = self.configs['product_alt'][alt_step]
+                for alt_step, alt_value in self.configs['product_alt'].items():
                     try:
                         content = eval(alt_value)
                         product_alt[alt_step] = content
-                    except:
+                    except Exception as e:
                         product_alt[alt_step] = None
 
                 if product_alt.get('name'):
@@ -95,14 +102,17 @@ class GenericBrowserSearchScraper(AbstractScraper):
         return data
     
     def extract_page(self, soup: BeautifulSoup):
-        main_container = soup.find(self.configs["search"]["tag"], class_=self.configs["search"]["main_container"])
-        if not main_container:
-            raise PageLoadException("Main container not found.")
-        
-        results = main_container.find_all(self.configs["search"]["tag"], attrs=self.configs["search"]["attribute"])
-        return results
+        try:
+            main_container = soup.find(self.configs["search"]["tag"], class_=self.configs["search"]["main_container"])
+            if not main_container:
+                raise PageLoadException("Main container not found")
+            
+            results = main_container.find_all(self.configs["search"]["tag"], attrs=self.configs["search"]["attribute"])
+            return results
+        except Exception as e:
+            raise PageLoadException(e)
 
-    def get_url(self, page = 1):
+    def get_url(self, page: int = 1) -> str:
         link_path = self.configs["link"]["path"]
         keyword_connector = self.configs["link"]["connector"]
         query_connector = self.configs["link"]["query_connector"]
@@ -114,22 +124,23 @@ class GenericBrowserSearchScraper(AbstractScraper):
             url = link_path + formatted_query
         return url
     
-    def transform_to_df(self, data):
-        df = pd.DataFrame(data)
-        df = df.assign(keyword=self.query)
-        df = df.assign(source=self.type)
-        df = df.assign(execution_date=datetime.now().isoformat())
-        df = df.assign(scrapper_type="Browser")
-        return df
+    def transform_to_df(self, data: list) -> pd.DataFrame:
+        try:
+            df = pd.DataFrame(data)
+            df = df.assign(keyword=self.query)
+            df = df.assign(source=self.type)
+            df = df.assign(execution_date=datetime.now().isoformat())
+            df = df.assign(scraper_type="Browser")
+            return df
+        except Exception as e:
+            logging.error(f"Failed to transform data to DataFrame: {e}")
+            raise
 
     def analyze_df(self, df: pd.DataFrame):
-        df.replace('N/A', pd.NA, inplace=True)
-        df['price'] = pd.to_numeric(df['price'], errors='coerce')
-        df.dropna(subset=['price'], inplace=True)
-        total_products = df['name'].nunique()
-        top_expensive = df.sort_values(by='price', ascending=False).head(10)
-        products_per_page = df['page'].value_counts()
-        print("Total number of products:", total_products)
-        print("Top 10 Most Expensive Products:\n", top_expensive)
-        print("Products per Page:\n", products_per_page)
-        return
+        try:
+            total_products = df['name'].nunique()
+            products_per_page = df['page'].value_counts()
+            logging.info(f"Total number of products: {total_products}")
+            logging.info(f"Products per Page:\n{products_per_page}")
+        except Exception as e:
+            logging.error(f"Failed to analyze DataFrame: {e}")
