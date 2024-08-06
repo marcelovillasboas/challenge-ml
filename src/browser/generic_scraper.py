@@ -140,7 +140,14 @@ class GenericBrowserSearchScraper(AbstractScraper):
         try:
             total_products = df['name'].nunique()
             products_per_page = df['page'].value_counts()
+
+            insights = pd.DataFrame({
+                'Total Unique Products': [total_products],
+                'Products per Page': [products_per_page.to_dict()]
+            })
+
             logging.info(f"Total number of products: {total_products}")
             logging.info(f"Products per Page:\n{products_per_page}")
+            self.save_data(insights, 'insights', ['Total Unique Products', 'Products per Page'])
         except Exception as e:
             logging.error(f"Failed to analyze DataFrame: {e}")
