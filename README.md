@@ -80,6 +80,18 @@ Ensure you have the following installed:
    poetry run python src/start.py
    ```
 
+   One can change the contents of the start.py script inserting a different argument to 'scrape()' coming from 'GenericBrowserSearchScraper' to search for different products. In the current example, the keyword 'macbook' was used.
+
+### Results
+
+The results of an execution will be saved in files at the root of the project:
+
+- `products.csv`: Stores the result found in the products pages;
+- `insights.csv`: Stores the information on the products execution volumetry after it's finished;
+- `superfinanciera.csv`: Stores the information found on the Superfinanciera CO page, along with the pdf transcription;
+- `audio_captcha_solution`: Stores the solution to the audio captcha;
+- `image_captcha_solution`: Stores the solution to the image captcha;
+
 ## Project Structure
 
 - `src/`: Contains the main application code.

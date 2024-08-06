@@ -4,6 +4,7 @@ import os
 import time
 from urllib.parse import urljoin
 
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from openai import OpenAI
@@ -31,7 +32,9 @@ class CaptchaSolver(AbstractScraper):
         try:
             self.execute_before(self.configs)
             time.sleep(int(self.configs["navigation"]["load_timeout"]))
-            self.execute_main()
+            data = self.execute_main()
+            captcha_type = self.configs["type"]
+            self.save_data(data, f'{captcha_type}_captcha_solution', ['Captcha Solution'])
         except Exception as e:
             print(f"An error occurred during scraping: {e}")
 
@@ -41,10 +44,14 @@ class CaptchaSolver(AbstractScraper):
             soup = BeautifulSoup(self.html, "html.parser")
             if self.configs["type"] == 'audio':
                 self.get_audio()
-                self.transcribe_audio()
+                data = self.transcribe_audio()
+                data = self.transform_to_df(data)
+                return data
             else:
                 self.get_image(soup)
-                self.solve_captcha()
+                data = self.solve_captcha()
+                data = self.transform_to_df(data)
+                return data
         except Exception as e:
             raise Exception("Failed to execute main scraping logic.") from e
 
@@ -102,7 +109,8 @@ class CaptchaSolver(AbstractScraper):
                     model='whisper-1',
                     file=audio_file
                 )
-            print(transcription.text)
+            result = transcription.text.replace(', ', '').replace('.', '')
+            return result
         except FileNotFoundError as e:
             print(f"Audio file not found: {e}")
         except Exception as e:
@@ -113,6 +121,13 @@ class CaptchaSolver(AbstractScraper):
             api_key = os.getenv('SOLVER_API_KEY', '')
             solver = TwoCaptcha(api_key)
             result = solver.normal(os.path.join(self.base_dir, 'captcha_image.png'))
-            print(result)
+            return result['code']
         except Exception as e:
             raise Exception("Failed to solve captcha.") from e
+        
+    def transform_to_df(self, data):
+        df = pd.DataFrame({
+            'Captcha Solution': [data]
+        })
+
+        return df
