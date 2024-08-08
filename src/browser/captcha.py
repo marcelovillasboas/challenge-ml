@@ -33,9 +33,11 @@ class CaptchaSolver(AbstractScraper):
             self.execute_before(self.configs)
             time.sleep(int(self.configs["navigation"]["load_timeout"]))
             data = self.execute_main()
+            self.browser.quit()
             captcha_type = self.configs["type"]
             self.save_data(data, f'{captcha_type}_captcha_solution', ['Captcha Solution'])
         except Exception as e:
+            self.browser.quit()
             print(f"An error occurred during scraping: {e}")
 
     def execute_main(self):

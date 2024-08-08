@@ -5,7 +5,7 @@ from browser.provider.generic_browser_provider import GenericBrowserProvider
 from tools.csv_handler import CsvHandler
 from browser.provider.actions.dict import action_dict
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 class AbstractScraper(ABC):
     def __init__(self):

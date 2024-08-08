@@ -2,7 +2,7 @@ import pandas as pd
 from typing import TypeVar, Generic, List, Union
 import logging
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 T = TypeVar('T', bound=pd.DataFrame)
 

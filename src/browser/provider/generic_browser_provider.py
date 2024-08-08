@@ -4,7 +4,7 @@ import logging
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 class GenericBrowserProvider:
     def __init__(self):
@@ -52,7 +52,7 @@ class GenericBrowserProvider:
 
     def _set_headless_mode(self) -> None:
         """Set the browser to headless mode based on environment variable."""
-        headless = 'True'
+        headless = 'False'
         if headless and headless.lower() in ['true', '1']:
             self.options.add_argument("--headless")
 

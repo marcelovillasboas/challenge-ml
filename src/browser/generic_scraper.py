@@ -97,7 +97,7 @@ class GenericBrowserSearchScraper(AbstractScraper):
 
         if len(data) > 4:
             data = data[1:]
-            data = data[:-4]
+            data = data[:-3]
 
         return data
     
